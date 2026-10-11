@@ -49,8 +49,6 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .status.high { background: rgba(245,158,11,0.15); color: var(--warning); }
 .status.medium { background: rgba(56,189,248,0.15); color: var(--accent2); }
 .status.low { background: rgba(16,185,129,0.15); color: var(--success); }
-.status.in-progress { background: rgba(56,189,248,0.15); color: var(--accent2); }
-.status.not-started { background: rgba(244,63,94,0.15); color: var(--danger); }
 .alert-card { background: linear-gradient(135deg, rgba(244,63,94,0.1), rgba(244,63,94,0.05)); border: 1px solid rgba(244,63,94,0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
 .alert-card h3 { color: var(--danger); font-size: 14px; margin-bottom: 12px; }
 .alert-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(244,63,94,0.1); }
@@ -69,36 +67,32 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 </div>
 <div class="container">
   <div class="kpi-grid">
-    <div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">52</div><div class="kpi-sub up">Active WIP</div></div>
-    <div class="kpi-card blue"><div class="kpi-label">Total JO Quantity</div><div class="kpi-value">14,068</div><div class="kpi-sub up">Pieces</div></div>
-    <div class="kpi-card green"><div class="kpi-label">Total Produced</div><div class="kpi-value">5,381</div><div class="kpi-sub up">38.2% complete</div></div>
-    <div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">8,687</div><div class="kpi-sub down">61.8% remaining</div></div>
-    <div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">40</div><div class="kpi-sub down">10+ days old</div></div>
+    <div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">235</div><div class="kpi-sub up">Active WIP</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Total Quantity</div><div class="kpi-value">139,320</div><div class="kpi-sub up">Pieces</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Total Processed</div><div class="kpi-value">161,036</div><div class="kpi-sub up">100.0% complete</div></div>
+    <div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">0</div><div class="kpi-sub down">0.0% remaining</div></div>
+    <div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub down">10+ days old</div></div>
   </div>
   <div class="charts-grid">
-    <div class="chart-card"><h3>Process Bottleneck — Pending vs Produced</h3><div class="chart-container"><canvas id="processChart"></canvas></div></div>
-    <div class="chart-card"><h3>Company-wise Distribution</h3><div class="chart-container"><canvas id="companyChart"></canvas></div></div>
+    <div class="chart-card"><h3>Process Bottleneck — Pending vs Processed</h3><div class="chart-container"><canvas id="processChart"></canvas></div></div>
+    <div class="chart-card"><h3>Process Status Distribution</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
   </div>
-  <div class="table-card"><h3>Worker Performance Ranking</h3><table><thead><tr><th>Rank</th><th>Worker</th><th>JO Qty</th><th>Produced</th><th>Pending</th><th>Efficiency</th></tr></thead><tbody id="workerTable"></tbody></table></div>
   <div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders — Immediate Attention Required</h3><div id="oldOrders"></div></div>
-  <div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Produced</th><th>Status</th></tr></thead><tbody id="processTable"></tbody></table></div>
+  <div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Processed</th><th>Status</th></tr></thead><tbody id="processTable"></tbody></table></div>
 </div>
 <div class="footer">Supply Chain Control Tower • Jaipur Kurti • Last updated: <span id="lastUpdated"></span></div>
 <script>
 const now = new Date();
 document.getElementById('currentDate').textContent = now.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 document.getElementById('lastUpdated').textContent = now.toLocaleString('en-IN');
-const processes = [
-  {name:"Dye",pending:3170,produced:0,status:"CRITICAL"},{name:"Cutting-1",pending:4937,produced:0,status:"HIGH"},{name:"Cutting-2",pending:1200,produced:800,status:"HIGH"},{name:"Stitching",pending:4037,produced:2500,status:"HIGH"},{name:"Embroidery",pending:1800,produced:1200,status:"MEDIUM"},{name:"Sequins/Beads",pending:950,produced:600,status:"MEDIUM"},{name:"Washing",pending:2100,produced:800,status:"HIGH"},{name:"Ironing",pending:700,produced:400,status:"MEDIUM"},{name:"Packing",pending:1300,produced:381,status:"HIGH"},{name:"Dispatch",pending:0,produced:0,status:"LOW"}
-];
-const companies = [{name:"In-House",pending:5200},{name:"MISC Company",pending:2100},{name:"Rajasthan Art",pending:800},{name:"Jaipur Embroidery",pending:587}];
-const workers = [{name:"Nidhat Khan",jo:450,prod:405},{name:"Firoj Khan",jo:380,prod:323},{name:"Salim Khan",jo:420,prod:336},{name:"Imran Khan",jo:350,prod:263},{name:"Ravi Kumar",jo:400,prod:280},{name:"Mohan Lal",jo:320,prod:208},{name:"Sunita Devi",jo:300,prod:180},{name:"Kamla Devi",jo:280,prod:154},{name:"Shanti Devi",jo:250,prod:113},{name:"Rekha Devi",jo:200,prod:70},{name:"Anita Sharma",jo:180,prod:54},{name:"Poonam Sharma",jo:150,prod:38},{name:"Ganga Devi",jo:120,prod:24},{name:"Kailash Kumar",jo:100,prod:15},{name:"Hari Lal",jo:80,prod:8}];
-const oldOrders = [{jo:"JO-2026-0342",date:"22-Sep",days:18,qty:450,party:"MISC Company",status:"NOT STARTED"},{jo:"JO-2026-0338",date:"23-Sep",days:17,qty:320,party:"In-House",status:"IN PROGRESS"},{jo:"JO-2026-0335",date:"24-Sep",days:16,qty:280,party:"Rajasthan Art",status:"NOT STARTED"},{jo:"JO-2026-0330",date:"25-Sep",days:15,qty:500,party:"In-House",status:"IN PROGRESS"},{jo:"JO-2026-0325",date:"27-Sep",days:13,qty:350,party:"Jaipur Embroidery",status:"NOT STARTED"}];
-new Chart(document.getElementById('processChart'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{label:'Pending',data:processes.map(p=>p.pending),backgroundColor:'rgba(244,63,94,0.7)',borderRadius:4},{label:'Produced',data:processes.map(p=>p.produced),backgroundColor:'rgba(16,185,129,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
-new Chart(document.getElementById('companyChart'),{type:'doughnut',data:{labels:companies.map(c=>c.name),datasets:[{data:companies.map(c=>c.pending),backgroundColor:['#14b8a6','#38bdf8','#818cf8','#f59e0b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12}}}}});
-workers.forEach((w,i)=>{const pend=w.jo-w.prod;const eff=Math.round(w.prod/w.jo*100);const color=eff>=70?'#10b981':eff>=50?'#f59e0b':'#f43f5e';document.getElementById('workerTable').innerHTML+=`<tr><td>#${i+1}</td><td>${w.name}</td><td>${w.jo}</td><td>${w.prod}</td><td>${pend}</td><td><span style="color:${color};font-weight:600">${eff}%</span></td></tr>`;});
-oldOrders.forEach(o=>{document.getElementById('oldOrders').innerHTML+=`<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.party} — ${o.qty} pcs</div><div><span class="status ${o.status==='IN PROGRESS'?'in-progress':'not-started'}">${o.status}</span> • ${o.days} days old</div></div>`;});
-processes.forEach(p=>{document.getElementById('processTable').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td>${p.produced.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`;});
+const processes = [{"name": "Cutting-1", "pending": 11425, "processed": 40917, "status": "CRITICAL"}, {"name": "Stitching", "pending": 7839, "processed": 30754, "status": "CRITICAL"}, {"name": "Hand Cutting-2", "pending": 46, "processed": 2257, "status": "LOW"}, {"name": "Dye", "pending": 0, "processed": 16641, "status": "LOW"}, {"name": "Hand Cutting", "pending": 0, "processed": 484, "status": "LOW"}, {"name": "Embroidery", "pending": 0, "processed": 10021, "status": "LOW"}, {"name": "Pintuck", "pending": 0, "processed": 65, "status": "LOW"}, {"name": "Buttoning", "pending": 0, "processed": 23071, "status": "LOW"}, {"name": "Hand Work", "pending": 0, "processed": 7238, "status": "LOW"}, {"name": "Finishing", "pending": 0, "processed": 28728, "status": "LOW"}, {"name": "Packing", "pending": 0, "processed": 860, "status": "LOW"}];
+const oldOrders = [{"jo": "JOD1177", "item": "1B25KPNTR002 ORANGE", "shade": "ORANGE", "days": 671}, {"jo": "JOD1179", "item": "1B25KPNTR002 MAROON", "shade": "MAROON", "days": 670}, {"jo": "JOS1550", "item": "1C26FSWRR087 MAROON", "shade": "MAROON", "days": 76}, {"jo": "JOS1551", "item": "1B26KFSWR311 BLACK", "shade": "BLACK", "days": 76}, {"jo": "JOS1553", "item": "1C26PLZOR303 OFFWHITE", "shade": "OFFWHITE", "days": 76}, {"jo": "JOS1554", "item": "1C26PLZOR038 OFFWHITE", "shade": "OFFWHITE", "days": 76}, {"jo": "JOS1555", "item": "2C26KFWDR144 BLACK", "shade": "BLACK", "days": 75}, {"jo": "JOS1556", "item": "1B26KFSWR311 FUCHSIA", "shade": "FUCHSIA", "days": 75}, {"jo": "JOS1557", "item": "1B26KFSWR311 NAVY BLUE", "shade": "NAVY BLUE", "days": 75}, {"jo": "JOS1558", "item": "1C26KPTDR100 OFFWHITE", "shade": "OFFWHITE", "days": 74}];
+new Chart(document.getElementById('processChart'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{label:'Pending',data:processes.map(p=>p.pending),backgroundColor:'rgba(244,63,94,0.7)',borderRadius:4},{label:'Processed',data:processes.map(p=>p.processed),backgroundColor:'rgba(16,185,129,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
+const statusCounts = {CRITICAL:0,HIGH:0,MEDIUM:0,LOW:0};
+processes.forEach(p => { statusCounts[p.status]++; });
+new Chart(document.getElementById('statusChart'),{type:'doughnut',data:{labels:Object.keys(statusCounts),datasets:[{data:Object.values(statusCounts),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#10b981'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12}}}}});
+oldOrders.forEach(o => { document.getElementById('oldOrders').innerHTML += `<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.item} (${o.shade})</div><div><span class="status ${o.days > 15 ? 'critical' : 'high'}">${o.days} days old</span></div></div>`; });
+processes.forEach(p => { document.getElementById('processTable').innerHTML += `<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td>${p.processed.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`; });
 </script>
 </body>
 </html>
