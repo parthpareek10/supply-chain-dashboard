@@ -3,378 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Business Dashboard - Jaipur Kurti</title>
+<title>Supply Chain Control Tower — WIP Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --card-hover: #334155;
-  --accent: #38bdf8;
-  --accent2: #818cf8;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
-  --text: #f1f5f9;
-  --text-muted: #94a3b8;
-  --border: #334155;
+  --bg: #0f172a; --card: #1e293b; --card-hover: #334155;
+  --accent: #14b8a6; --accent2: #38bdf8; --accent3: #818cf8;
+  --success: #10b981; --warning: #f59e0b; --danger: #f43f5e;
+  --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-.header {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  border-bottom: 1px solid var(--border);
-  padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.header h1 {
-  font-size: 24px;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.header .date { color: var(--text-muted); font-size: 14px; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+.header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid var(--border); padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 22px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header .subtitle { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+.header .date { color: var(--text-muted); font-size: 13px; text-align: right; }
 .container { padding: 20px 30px; max-width: 1400px; margin: 0 auto; }
-
-/* KPI Cards */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-.kpi-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; transition: all 0.3s; }
 .kpi-card:hover { background: var(--card-hover); transform: translateY(-2px); }
-.kpi-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  border-radius: 12px 12px 0 0;
-}
-.kpi-card.blue::before { background: var(--accent); }
-.kpi-card.purple::before { background: var(--accent2); }
+.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
+.kpi-card.teal::before { background: var(--accent); }
+.kpi-card.blue::before { background: var(--accent2); }
 .kpi-card.green::before { background: var(--success); }
-.kpi-card.yellow::before { background: var(--warning); }
-.kpi-card.red::before { background: var(--danger); }
-.kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.kpi-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-.kpi-change { font-size: 12px; }
-.kpi-change.up { color: var(--success); }
-.kpi-change.down { color: var(--danger); }
-
-/* Charts section */
-.charts-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-.chart-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-}
-.chart-card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
-.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding-top: 10px; }
-.bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.bar {
-  width: 100%;
-  border-radius: 4px 4px 0 0;
-  transition: all 0.3s ease;
-  min-height: 4px;
-}
-.bar:hover { opacity: 0.8; }
-.bar-label { font-size: 10px; color: var(--text-muted); }
-.bar-value { font-size: 10px; color: var(--text); font-weight: 600; }
-
-/* Donut chart */
-.donut-container { display: flex; align-items: center; justify-content: center; gap: 20px; }
-.donut { width: 140px; height: 140px; border-radius: 50%; position: relative; }
-.donut-center {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 80px; height: 80px; background: var(--card); border-radius: 50%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.donut-center .val { font-size: 18px; font-weight: 700; }
-.donut-center .lbl { font-size: 10px; color: var(--text-muted); }
-.legend { display: flex; flex-direction: column; gap: 8px; }
-.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-
-/* Table */
-.table-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-  overflow-x: auto;
-}
-.table-card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+.kpi-card.amber::before { background: var(--warning); }
+.kpi-card.rose::before { background: var(--danger); }
+.kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.kpi-value { font-size: 30px; font-weight: 700; margin-bottom: 4px; }
+.kpi-sub { font-size: 12px; }
+.kpi-sub.up { color: var(--success); }
+.kpi-sub.down { color: var(--danger); }
+.charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.chart-card h3 { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+.chart-container { position: relative; height: 280px; }
+.table-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; overflow-x: auto; }
+.table-card h3 { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
 table { width: 100%; border-collapse: collapse; }
 th { text-align: left; padding: 10px 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
 td { padding: 12px; font-size: 13px; border-bottom: 1px solid var(--border); }
 tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(255,255,255,0.02); }
 .status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.status.completed { background: rgba(52,211,153,0.15); color: var(--success); }
-.status.pending { background: rgba(251,191,36,0.15); color: var(--warning); }
-.status.processing { background: rgba(56,189,248,0.15); color: var(--accent); }
-
-/* Progress bars */
-.progress-item { margin-bottom: 16px; }
-.progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; }
-.progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-
-/* Footer */
+.status.critical { background: rgba(244,63,94,0.15); color: var(--danger); }
+.status.high { background: rgba(245,158,11,0.15); color: var(--warning); }
+.status.medium { background: rgba(56,189,248,0.15); color: var(--accent2); }
+.status.low { background: rgba(16,185,129,0.15); color: var(--success); }
+.status.in-progress { background: rgba(56,189,248,0.15); color: var(--accent2); }
+.status.not-started { background: rgba(244,63,94,0.15); color: var(--danger); }
+.alert-card { background: linear-gradient(135deg, rgba(244,63,94,0.1), rgba(244,63,94,0.05)); border: 1px solid rgba(244,63,94,0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+.alert-card h3 { color: var(--danger); font-size: 14px; margin-bottom: 12px; }
+.alert-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(244,63,94,0.1); }
+.alert-item:last-child { border-bottom: none; }
 .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border); }
-
-@media (max-width: 768px) {
-  .charts-grid { grid-template-columns: 1fr; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-}
+@media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
-
 <div class="header">
-  <h1>📊 Business Dashboard</h1>
+  <div>
+    <h1>📊 Supply Chain Control Tower</h1>
+    <div class="subtitle">Real-time WIP Monitoring — Jaipur Kurti Production</div>
+  </div>
   <div class="date" id="currentDate"></div>
 </div>
-
 <div class="container">
-
-  <!-- KPI Cards -->
   <div class="kpi-grid">
-    <div class="kpi-card blue">
-      <div class="kpi-label">Total Revenue (FY25-26)</div>
-      <div class="kpi-value">₹110 Cr</div>
-      <div class="kpi-change up">↑ 50% vs last year</div>
-    </div>
-    <div class="kpi-card purple">
-      <div class="kpi-label">Active Orders</div>
-      <div class="kpi-value">1,247</div>
-      <div class="kpi-change up">↑ 12% this month</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">Production Rate</div>
-      <div class="kpi-value">87%</div>
-      <div class="kpi-change up">↑ 5% vs target</div>
-    </div>
-    <div class="kpi-card yellow">
-      <div class="kpi-label">Pending Deliveries</div>
-      <div class="kpi-value">23</div>
-      <div class="kpi-change down">↓ 8% vs last week</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-label">Return Rate</div>
-      <div class="kpi-value">2.3%</div>
-      <div class="kpi-change up">↓ 0.5% improvement</div>
-    </div>
+    <div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">52</div><div class="kpi-sub up">Active WIP</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Total JO Quantity</div><div class="kpi-value">14,068</div><div class="kpi-sub up">Pieces</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Total Produced</div><div class="kpi-value">5,381</div><div class="kpi-sub up">38.2% complete</div></div>
+    <div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">8,687</div><div class="kpi-sub down">61.8% remaining</div></div>
+    <div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">40</div><div class="kpi-sub down">10+ days old</div></div>
   </div>
-
-  <!-- Charts -->
   <div class="charts-grid">
-    <div class="chart-card">
-      <h3>Monthly Revenue Trend (₹ Lakhs)</h3>
-      <div class="bar-chart" id="revenueChart"></div>
-    </div>
-    <div class="chart-card">
-      <h3>Sales by Channel</h3>
-      <div class="donut-container">
-        <div class="donut" id="donutChart">
-          <div class="donut-center">
-            <div class="val">100%</div>
-            <div class="lbl">Total</div>
-          </div>
-        </div>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#38bdf8"></div> Myntra (35%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#818cf8"></div> Ajio (20%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Nykaa (15%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div> Website (12%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#f87171"></div> Retail (10%)</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div> Others (8%)</div>
-        </div>
-      </div>
-    </div>
+    <div class="chart-card"><h3>Process Bottleneck — Pending vs Produced</h3><div class="chart-container"><canvas id="processChart"></canvas></div></div>
+    <div class="chart-card"><h3>Company-wise Distribution</h3><div class="chart-container"><canvas id="companyChart"></canvas></div></div>
   </div>
-
-  <!-- Progress -->
-  <div class="charts-grid">
-    <div class="chart-card">
-      <h3>Project 50 — Store Expansion Progress</h3>
-      <div class="progress-item">
-        <div class="progress-header"><span>Jaipur Kurti</span><span>12 / 20 stores</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:60%; background: linear-gradient(90deg, #38bdf8, #818cf8);"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Amaiva</span><span>1 / 5 stores</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:20%; background: linear-gradient(90deg, #34d399, #38bdf8);"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Desi Fusion</span><span>1 / 5 stores</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:20%; background: linear-gradient(90deg, #fbbf24, #f87171);"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>JK Luxe</span><span>0 / 5 stores</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:0%; background: linear-gradient(90deg, #a78bfa, #818cf8);"></div></div>
-      </div>
-    </div>
-    <div class="chart-card">
-      <h3>Brand Performance Score</h3>
-      <div class="progress-item">
-        <div class="progress-header"><span>Jaipur Kurti</span><span>92/100</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:92%; background: #34d399;"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Amaiva</span><span>78/100</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:78%; background: #38bdf8;"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>Desi Fusion</span><span>71/100</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:71%; background: #fbbf24;"></div></div>
-      </div>
-      <div class="progress-item">
-        <div class="progress-header"><span>JK Luxe</span><span>65/100</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:65%; background: #f87171;"></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Recent Orders Table -->
-  <div class="table-card">
-    <h3>Recent Orders</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Brand</th>
-          <th>Channel</th>
-          <th>Amount</th>
-          <th>Status</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>#ORD-2026-1047</td>
-          <td>Jaipur Kurti</td>
-          <td>Myntra</td>
-          <td>₹2,45,000</td>
-          <td><span class="status completed">Completed</span></td>
-          <td>08-10-2026</td>
-        </tr>
-        <tr>
-          <td>#ORD-2026-1046</td>
-          <td>Amaiva</td>
-          <td>Ajio</td>
-          <td>₹1,89,000</td>
-          <td><span class="status processing">Processing</span></td>
-          <td>08-10-2026</td>
-        </tr>
-        <tr>
-          <td>#ORD-2026-1045</td>
-          <td>Jaipur Kurti</td>
-          <td>Nykaa</td>
-          <td>₹3,12,000</td>
-          <td><span class="status completed">Completed</span></td>
-          <td>07-10-2026</td>
-        </tr>
-        <tr>
-          <td>#ORD-2026-1044</td>
-          <td>Desi Fusion</td>
-          <td>Website</td>
-          <td>₹95,000</td>
-          <td><span class="status pending">Pending</span></td>
-          <td>07-10-2026</td>
-        </tr>
-        <tr>
-          <td>#ORD-2026-1043</td>
-          <td>JK Luxe</td>
-          <td>Retail</td>
-          <td>₹4,56,000</td>
-          <td><span class="status completed">Completed</span></td>
-          <td>06-10-2026</td>
-        </tr>
-        <tr>
-          <td>#ORD-2026-1042</td>
-          <td>Jaipur Kurti</td>
-          <td>Myntra</td>
-          <td>₹1,78,000</td>
-          <td><span class="status processing">Processing</span></td>
-          <td>06-10-2026</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
+  <div class="table-card"><h3>Worker Performance Ranking</h3><table><thead><tr><th>Rank</th><th>Worker</th><th>JO Qty</th><th>Produced</th><th>Pending</th><th>Efficiency</th></tr></thead><tbody id="workerTable"></tbody></table></div>
+  <div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders — Immediate Attention Required</h3><div id="oldOrders"></div></div>
+  <div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Produced</th><th>Status</th></tr></thead><tbody id="processTable"></tbody></table></div>
 </div>
-
-<div class="footer">
-  Jaipur Kurti Business Dashboard • Last updated: <span id="lastUpdated"></span>
-</div>
-
+<div class="footer">Supply Chain Control Tower • Jaipur Kurti • Last updated: <span id="lastUpdated"></span></div>
 <script>
-// Set date
 const now = new Date();
 document.getElementById('currentDate').textContent = now.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 document.getElementById('lastUpdated').textContent = now.toLocaleString('en-IN');
-
-// Revenue bar chart
-const revenueData = [
-  { month: 'Apr', value: 680 }, { month: 'May', value: 720 }, { month: 'Jun', value: 810 },
-  { month: 'Jul', value: 780 }, { month: 'Aug', value: 890 }, { month: 'Sep', value: 920 },
-  { month: 'Oct', value: 950 }
+const processes = [
+  {name:"Dye",pending:3170,produced:0,status:"CRITICAL"},{name:"Cutting-1",pending:4937,produced:0,status:"HIGH"},{name:"Cutting-2",pending:1200,produced:800,status:"HIGH"},{name:"Stitching",pending:4037,produced:2500,status:"HIGH"},{name:"Embroidery",pending:1800,produced:1200,status:"MEDIUM"},{name:"Sequins/Beads",pending:950,produced:600,status:"MEDIUM"},{name:"Washing",pending:2100,produced:800,status:"HIGH"},{name:"Ironing",pending:700,produced:400,status:"MEDIUM"},{name:"Packing",pending:1300,produced:381,status:"HIGH"},{name:"Dispatch",pending:0,produced:0,status:"LOW"}
 ];
-const maxVal = Math.max(...revenueData.map(d => d.value));
-const colors = ['#38bdf8', '#818cf8', '#34d399', '#fbbf24', '#f87171', '#a78bfa', '#38bdf8'];
-const chartContainer = document.getElementById('revenueChart');
-revenueData.forEach((d, i) => {
-  const height = (d.value / maxVal) * 160;
-  const wrapper = document.createElement('div');
-  wrapper.className = 'bar-wrapper';
-  wrapper.innerHTML = `
-    <div class="bar-value">₹${d.value}L</div>
-    <div class="bar" style="height:${height}px; background: linear-gradient(180deg, ${colors[i]}, ${colors[i]}88);"></div>
-    <div class="bar-label">${d.month}</div>
-  `;
-  chartContainer.appendChild(wrapper);
-});
-
-// Donut chart
-const donut = document.getElementById('donutChart');
-const channels = [
-  { pct: 35, color: '#38bdf8' }, { pct: 20, color: '#818cf8' },
-  { pct: 15, color: '#34d399' }, { pct: 12, color: '#fbbf24' },
-  { pct: 10, color: '#f87171' }, { pct: 8, color: '#a78bfa' }
-];
-let cumulative = 0;
-const gradientStops = channels.map(c => {
-  const start = cumulative;
-  cumulative += c.pct;
-  return `${c.color} ${start}% ${cumulative}%`;
-});
-donut.style.background = `conic-gradient(${gradientStops.join(', ')})`;
+const companies = [{name:"In-House",pending:5200},{name:"MISC Company",pending:2100},{name:"Rajasthan Art",pending:800},{name:"Jaipur Embroidery",pending:587}];
+const workers = [{name:"Nidhat Khan",jo:450,prod:405},{name:"Firoj Khan",jo:380,prod:323},{name:"Salim Khan",jo:420,prod:336},{name:"Imran Khan",jo:350,prod:263},{name:"Ravi Kumar",jo:400,prod:280},{name:"Mohan Lal",jo:320,prod:208},{name:"Sunita Devi",jo:300,prod:180},{name:"Kamla Devi",jo:280,prod:154},{name:"Shanti Devi",jo:250,prod:113},{name:"Rekha Devi",jo:200,prod:70},{name:"Anita Sharma",jo:180,prod:54},{name:"Poonam Sharma",jo:150,prod:38},{name:"Ganga Devi",jo:120,prod:24},{name:"Kailash Kumar",jo:100,prod:15},{name:"Hari Lal",jo:80,prod:8}];
+const oldOrders = [{jo:"JO-2026-0342",date:"22-Sep",days:18,qty:450,party:"MISC Company",status:"NOT STARTED"},{jo:"JO-2026-0338",date:"23-Sep",days:17,qty:320,party:"In-House",status:"IN PROGRESS"},{jo:"JO-2026-0335",date:"24-Sep",days:16,qty:280,party:"Rajasthan Art",status:"NOT STARTED"},{jo:"JO-2026-0330",date:"25-Sep",days:15,qty:500,party:"In-House",status:"IN PROGRESS"},{jo:"JO-2026-0325",date:"27-Sep",days:13,qty:350,party:"Jaipur Embroidery",status:"NOT STARTED"}];
+new Chart(document.getElementById('processChart'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{label:'Pending',data:processes.map(p=>p.pending),backgroundColor:'rgba(244,63,94,0.7)',borderRadius:4},{label:'Produced',data:processes.map(p=>p.produced),backgroundColor:'rgba(16,185,129,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
+new Chart(document.getElementById('companyChart'),{type:'doughnut',data:{labels:companies.map(c=>c.name),datasets:[{data:companies.map(c=>c.pending),backgroundColor:['#14b8a6','#38bdf8','#818cf8','#f59e0b'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12}}}}});
+workers.forEach((w,i)=>{const pend=w.jo-w.prod;const eff=Math.round(w.prod/w.jo*100);const color=eff>=70?'#10b981':eff>=50?'#f59e0b':'#f43f5e';document.getElementById('workerTable').innerHTML+=`<tr><td>#${i+1}</td><td>${w.name}</td><td>${w.jo}</td><td>${w.prod}</td><td>${pend}</td><td><span style="color:${color};font-weight:600">${eff}%</span></td></tr>`;});
+oldOrders.forEach(o=>{document.getElementById('oldOrders').innerHTML+=`<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.party} — ${o.qty} pcs</div><div><span class="status ${o.status==='IN PROGRESS'?'in-progress':'not-started'}">${o.status}</span> • ${o.days} days old</div></div>`;});
+processes.forEach(p=>{document.getElementById('processTable').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td>${p.produced.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`;});
 </script>
-
 </body>
 </html>
