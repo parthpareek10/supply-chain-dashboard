@@ -3,96 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Supply Chain Control Tower — WIP Dashboard</title>
+<title>WIP Dashboard — Jaipur Kurti</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root {
-  --bg: #0f172a; --card: #1e293b; --card-hover: #334155;
-  --accent: #14b8a6; --accent2: #38bdf8; --accent3: #818cf8;
-  --success: #10b981; --warning: #f59e0b; --danger: #f43f5e;
-  --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-.header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid var(--border); padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; }
-.header h1 { font-size: 22px; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.header .subtitle { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
-.header .date { color: var(--text-muted); font-size: 13px; text-align: right; }
-.container { padding: 20px 30px; max-width: 1400px; margin: 0 auto; }
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; position: relative; overflow: hidden; transition: all 0.3s; }
-.kpi-card:hover { background: var(--card-hover); transform: translateY(-2px); }
-.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
-.kpi-card.teal::before { background: var(--accent); }
-.kpi-card.blue::before { background: var(--accent2); }
-.kpi-card.green::before { background: var(--success); }
-.kpi-card.amber::before { background: var(--warning); }
-.kpi-card.rose::before { background: var(--danger); }
-.kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.kpi-value { font-size: 30px; font-weight: 700; margin-bottom: 4px; }
-.kpi-sub { font-size: 12px; }
-.kpi-sub.up { color: var(--success); }
-.kpi-sub.down { color: var(--danger); }
-.charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
-.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-.chart-card h3 { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
-.chart-container { position: relative; height: 280px; }
-.table-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; overflow-x: auto; }
-.table-card h3 { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
-table { width: 100%; border-collapse: collapse; }
-th { text-align: left; padding: 10px 12px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
-td { padding: 12px; font-size: 13px; border-bottom: 1px solid var(--border); }
-tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(255,255,255,0.02); }
-.status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.status.critical { background: rgba(244,63,94,0.15); color: var(--danger); }
-.status.high { background: rgba(245,158,11,0.15); color: var(--warning); }
-.status.medium { background: rgba(56,189,248,0.15); color: var(--accent2); }
-.status.low { background: rgba(16,185,129,0.15); color: var(--success); }
-.alert-card { background: linear-gradient(135deg, rgba(244,63,94,0.1), rgba(244,63,94,0.05)); border: 1px solid rgba(244,63,94,0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-.alert-card h3 { color: var(--danger); font-size: 14px; margin-bottom: 12px; }
-.alert-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(244,63,94,0.1); }
-.alert-item:last-child { border-bottom: none; }
-.footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border); }
-@media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+:root{--bg:#0f172a;--card:#1e293b;--accent:#14b8a6;--accent2:#38bdf8;--success:#10b981;--warning:#f59e0b;--danger:#f43f5e;--text:#f1f5f9;--muted:#94a3b8;--border:#334155}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);border-bottom:1px solid var(--border);padding:18px 30px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{color:var(--muted);font-size:13px;margin-top:4px}
+.header .date{color:var(--muted);font-size:13px;text-align:right}
+.container{padding:20px 30px;max-width:1400px;margin:0 auto}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:all .3s}
+.kpi-card:hover{transform:translateY(-2px)}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.kpi-card.teal::before{background:var(--accent)}.kpi-card.blue::before{background:var(--accent2)}.kpi-card.green::before{background:var(--success)}.kpi-card.amber::before{background:var(--warning)}.kpi-card.rose::before{background:var(--danger)}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.kpi-value{font-size:28px;font-weight:700;margin-bottom:4px}
+.kpi-sub{font-size:12px}.kpi-sub.up{color:var(--success)}.kpi-sub.down{color:var(--danger)}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-card h3{font-size:12px;color:var(--muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
+.chart-container{position:relative;height:280px}
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px;overflow-x:auto}
+.table-card h3{font-size:12px;color:var(--muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,0.02)}
+.status{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.status.critical{background:rgba(244,63,94,0.15);color:var(--danger)}.status.high{background:rgba(245,158,11,0.15);color:var(--warning)}.status.medium{background:rgba(56,189,248,0.15);color:var(--accent2)}.status.low{background:rgba(16,185,129,0.15);color:var(--success)}
+.alert-card{background:linear-gradient(135deg,rgba(244,63,94,0.1),rgba(244,63,94,0.05));border:1px solid rgba(244,63,94,0.3);border-radius:12px;padding:20px;margin-bottom:24px}
+.alert-card h3{color:var(--danger);font-size:14px;margin-bottom:12px}
+.alert-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(244,63,94,0.1)}
+.alert-item:last-child{border-bottom:none}
+.footer{text-align:center;padding:20px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)}
+@media(max-width:768px){.charts-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 <div class="header">
-  <div>
-    <h1>📊 Supply Chain Control Tower</h1>
-    <div class="subtitle">Real-time WIP Monitoring — Jaipur Kurti Production</div>
-  </div>
-  <div class="date" id="currentDate"></div>
+<div><h1>📊 WIP Dashboard</h1><div class="sub">Job Order Wise Pending — Jaipur Kurti Production</div></div>
+<div class="date" id="currentDate"></div>
 </div>
 <div class="container">
-  <div class="kpi-grid">
-    <div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">235</div><div class="kpi-sub up">Active WIP</div></div>
-    <div class="kpi-card blue"><div class="kpi-label">Total Quantity</div><div class="kpi-value">139,320</div><div class="kpi-sub up">Pieces</div></div>
-    <div class="kpi-card green"><div class="kpi-label">Total Processed</div><div class="kpi-value">161,036</div><div class="kpi-sub up">100.0% complete</div></div>
-    <div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">0</div><div class="kpi-sub down">0.0% remaining</div></div>
-    <div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub down">10+ days old</div></div>
-  </div>
-  <div class="charts-grid">
-    <div class="chart-card"><h3>Process Bottleneck — Pending vs Processed</h3><div class="chart-container"><canvas id="processChart"></canvas></div></div>
-    <div class="chart-card"><h3>Process Status Distribution</h3><div class="chart-container"><canvas id="statusChart"></canvas></div></div>
-  </div>
-  <div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders — Immediate Attention Required</h3><div id="oldOrders"></div></div>
-  <div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Processed</th><th>Status</th></tr></thead><tbody id="processTable"></tbody></table></div>
+<div class="kpi-grid">
+<div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">48</div><div class="kpi-sub up">Active WIP</div></div>
+<div class="kpi-card blue"><div class="kpi-label">Total JO Quantity</div><div class="kpi-value">14,023</div><div class="kpi-sub up">Pieces</div></div>
+<div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">13,926</div><div class="kpi-sub down">Pieces pending</div></div>
+<div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub down">10+ days old</div></div>
 </div>
-<div class="footer">Supply Chain Control Tower • Jaipur Kurti • Last updated: <span id="lastUpdated"></span></div>
+<div class="charts-grid">
+<div class="chart-card"><h3>Process-wise Pending</h3><div class="chart-container"><canvas id="processChart"></canvas></div></div>
+<div class="chart-card"><h3>Party-wise Pending</h3><div class="chart-container"><canvas id="partyChart"></canvas></div></div>
+</div>
+<div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders</h3><div id="oldOrders"></div></div>
+<div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Status</th></tr></thead><tbody id="processTable"></tbody></table></div>
+<div class="table-card"><h3>Party Status</h3><table><thead><tr><th>Party</th><th>Pending</th></tr></thead><tbody id="partyTable"></tbody></table></div>
+</div>
+<div class="footer">WIP Dashboard • Jaipur Kurti • Last updated: <span id="lastUpdated"></span></div>
 <script>
-const now = new Date();
-document.getElementById('currentDate').textContent = now.toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-document.getElementById('lastUpdated').textContent = now.toLocaleString('en-IN');
-const processes = [{"name": "Cutting-1", "pending": 11425, "processed": 40917, "status": "CRITICAL"}, {"name": "Stitching", "pending": 7839, "processed": 30754, "status": "CRITICAL"}, {"name": "Hand Cutting-2", "pending": 46, "processed": 2257, "status": "LOW"}, {"name": "Dye", "pending": 0, "processed": 16641, "status": "LOW"}, {"name": "Hand Cutting", "pending": 0, "processed": 484, "status": "LOW"}, {"name": "Embroidery", "pending": 0, "processed": 10021, "status": "LOW"}, {"name": "Pintuck", "pending": 0, "processed": 65, "status": "LOW"}, {"name": "Buttoning", "pending": 0, "processed": 23071, "status": "LOW"}, {"name": "Hand Work", "pending": 0, "processed": 7238, "status": "LOW"}, {"name": "Finishing", "pending": 0, "processed": 28728, "status": "LOW"}, {"name": "Packing", "pending": 0, "processed": 860, "status": "LOW"}];
-const oldOrders = [{"jo": "JOD1177", "item": "1B25KPNTR002 ORANGE", "shade": "ORANGE", "days": 671}, {"jo": "JOD1179", "item": "1B25KPNTR002 MAROON", "shade": "MAROON", "days": 670}, {"jo": "JOS1550", "item": "1C26FSWRR087 MAROON", "shade": "MAROON", "days": 76}, {"jo": "JOS1551", "item": "1B26KFSWR311 BLACK", "shade": "BLACK", "days": 76}, {"jo": "JOS1553", "item": "1C26PLZOR303 OFFWHITE", "shade": "OFFWHITE", "days": 76}, {"jo": "JOS1554", "item": "1C26PLZOR038 OFFWHITE", "shade": "OFFWHITE", "days": 76}, {"jo": "JOS1555", "item": "2C26KFWDR144 BLACK", "shade": "BLACK", "days": 75}, {"jo": "JOS1556", "item": "1B26KFSWR311 FUCHSIA", "shade": "FUCHSIA", "days": 75}, {"jo": "JOS1557", "item": "1B26KFSWR311 NAVY BLUE", "shade": "NAVY BLUE", "days": 75}, {"jo": "JOS1558", "item": "1C26KPTDR100 OFFWHITE", "shade": "OFFWHITE", "days": 74}];
-new Chart(document.getElementById('processChart'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{label:'Pending',data:processes.map(p=>p.pending),backgroundColor:'rgba(244,63,94,0.7)',borderRadius:4},{label:'Processed',data:processes.map(p=>p.processed),backgroundColor:'rgba(16,185,129,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
-const statusCounts = {CRITICAL:0,HIGH:0,MEDIUM:0,LOW:0};
-processes.forEach(p => { statusCounts[p.status]++; });
-new Chart(document.getElementById('statusChart'),{type:'doughnut',data:{labels:Object.keys(statusCounts),datasets:[{data:Object.values(statusCounts),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#10b981'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12}}}}});
-oldOrders.forEach(o => { document.getElementById('oldOrders').innerHTML += `<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.item} (${o.shade})</div><div><span class="status ${o.days > 15 ? 'critical' : 'high'}">${o.days} days old</span></div></div>`; });
-processes.forEach(p => { document.getElementById('processTable').innerHTML += `<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td>${p.processed.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`; });
+const now=new Date();
+document.getElementById('currentDate').textContent=now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+document.getElementById('lastUpdated').textContent=now.toLocaleString('en-IN');
+const processes=[{"name": "DYE", "pending": 4374, "status": "CRITICAL"}, {"name": "CUTTING-1", "pending": 3913, "status": "CRITICAL"}, {"name": "STITCHING", "pending": 3236, "status": "CRITICAL"}, {"name": "EMBROIDERY", "pending": 1752, "status": "HIGH"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "HAND CUTTING-2", "pending": 132, "status": "LOW"}];
+const parties=[{"name": "FIROJ KHAN                    ", "pending": 4374}, {"name": "VISHWAROOP MANNA-CUTTING", "pending": 4045}, {"name": "NIDHAT KHAN                   ", "pending": 3236}, {"name": "KHUSI CREATION                ", "pending": 1176}, {"name": "YASH INDIA IMPEX", "pending": 1095}];
+const oldOrders=[{"jo": "JOS-1625", "days": 59, "pending": 132}, {"jo": "JOS-1679", "days": 37, "pending": 286}, {"jo": "JOS-1698", "days": 30, "pending": 116}, {"jo": "JOS-1699", "days": 30, "pending": 76}, {"jo": "JOS-1700", "days": 30, "pending": 165}, {"jo": "JOS-1703", "days": 30, "pending": 220}, {"jo": "JOS-1704", "days": 30, "pending": 150}, {"jo": "JOS-1709", "days": 28, "pending": 106}, {"jo": "JOS-1710", "days": 28, "pending": 501}, {"jo": "JOS-1713", "days": 28, "pending": 92}];
+
+new Chart(document.getElementById('processChart'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{label:'Pending',data:processes.map(p=>p.pending),backgroundColor:'rgba(244,63,94,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
+
+new Chart(document.getElementById('partyChart'),{type:'doughnut',data:{labels:parties.map(p=>p.name),datasets:[{data:parties.map(p=>p.pending),backgroundColor:['#14b8a6','#38bdf8','#818cf8','#f59e0b','#f43f5e'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12}}}}});
+
+oldOrders.forEach(o=>{document.getElementById('oldOrders').innerHTML+=`<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.pending} pcs pending</div><div><span class="status ${o.days>15?'critical':'high'}">${o.days} days old</span></div></div>`});
+processes.forEach(p=>{document.getElementById('processTable').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`});
+parties.forEach(p=>{document.getElementById('partyTable').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td></tr>`});
 </script>
 </body>
 </html>
