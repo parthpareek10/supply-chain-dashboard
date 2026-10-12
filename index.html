@@ -40,9 +40,9 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 <div class="header"><div><h1>📊 Production Dashboard</h1><div class="sub">WIP + Stock Received — Jaipur Kurti</div></div><div class="date" id="d"></div></div>
 <div class="container">
 <div class="kpi-grid">
-<div class="kpi-card teal"><div class="kpi-label">WIP Orders</div><div class="kpi-value">1025</div><div class="kpi-sub">In production</div></div>
-<div class="kpi-card blue"><div class="kpi-label">WIP Quantity</div><div class="kpi-value">78,018</div><div class="kpi-sub">Pieces in production</div></div>
-<div class="kpi-card amber"><div class="kpi-label">WIP Pending</div><div class="kpi-value">10,938</div><div class="kpi-sub">Pieces pending</div></div>
+<div class="kpi-card teal"><div class="kpi-label">WIP Orders</div><div class="kpi-value">237</div><div class="kpi-sub">In production</div></div>
+<div class="kpi-card blue"><div class="kpi-label">WIP Quantity</div><div class="kpi-value">91,145</div><div class="kpi-sub">Pieces in production</div></div>
+<div class="kpi-card amber"><div class="kpi-label">WIP Pending</div><div class="kpi-value">11,045</div><div class="kpi-sub">Pieces pending</div></div>
 <div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub">10+ days old</div></div>
 </div>
 <div class="charts-grid">
@@ -56,7 +56,7 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 <div class="footer">Production Dashboard • Last updated: <span id="lu"></span></div>
 <script>
 const d=new Date();document.getElementById('d').textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('lu').textContent=d.toLocaleString('en-IN');
-const processes=[{"name": "CUTTING-1", "pending": 29336, "status": "CRITICAL"}, {"name": "DYE", "pending": 4473, "status": "CRITICAL"}, {"name": "STITCHING", "pending": 2210, "status": "HIGH"}, {"name": "FINISHING", "pending": 2003, "status": "HIGH"}, {"name": "EMBROIDERY", "pending": 1291, "status": "MEDIUM"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "HAND CUTTING-2", "pending": 360, "status": "LOW"}, {"name": "HAND WORK", "pending": 200, "status": "LOW"}, {"name": "BUTTONING", "pending": 175, "status": "LOW"}, {"name": "HAND CUTTING", "pending": 30, "status": "LOW"}],parties=[{"name": "INHOUSE", "pending": 35326}, {"name": "FIROJ KHAN                    -JAIP", "pending": 4423}, {"name": "KHUSI CREATION                -JAIP", "pending": 798}],oldOrders=[{"jo": "JOD1", "days": 1291, "pending": 0}, {"jo": "JOD11", "days": 1291, "pending": 0}, {"jo": "JOD12", "days": 1291, "pending": 0}, {"jo": "JOD14", "days": 1291, "pending": 0}, {"jo": "JOD16", "days": 1291, "pending": 0}, {"jo": "JOD17", "days": 1291, "pending": 0}, {"jo": "JOD18", "days": 1291, "pending": 0}, {"jo": "JOD19", "days": 1291, "pending": 0}, {"jo": "JOD20", "days": 1291, "pending": 0}, {"jo": "JOD15", "days": 1291, "pending": 0}];
+const processes=[{"name": "CUTTING-1", "pending": 29336, "status": "CRITICAL"}, {"name": "DYE", "pending": 4473, "status": "CRITICAL"}, {"name": "STITCHING", "pending": 2210, "status": "HIGH"}, {"name": "FINISHING", "pending": 2003, "status": "HIGH"}, {"name": "EMBROIDERY", "pending": 1291, "status": "MEDIUM"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "HAND CUTTING-2", "pending": 360, "status": "LOW"}, {"name": "HAND WORK", "pending": 200, "status": "LOW"}, {"name": "BUTTONING", "pending": 175, "status": "LOW"}, {"name": "HAND CUTTING", "pending": 30, "status": "LOW"}],parties=[{"name": "INHOUSE", "pending": 35326}, {"name": "FIROJ KHAN                    -JAIP", "pending": 4423}, {"name": "KHUSI CREATION                -JAIP", "pending": 798}],oldOrders=[{"jo": "JOS1550", "days": 77, "pending": 0}, {"jo": "JOS1551", "days": 77, "pending": 375}, {"jo": "JOS1553", "days": 77, "pending": 0}, {"jo": "JOS1554", "days": 77, "pending": 0}, {"jo": "JOS1555", "days": 76, "pending": 0}, {"jo": "JOS1556", "days": 76, "pending": 180}, {"jo": "JOS1557", "days": 76, "pending": 100}, {"jo": "JOS1558", "days": 75, "pending": 0}, {"jo": "JOS1559", "days": 74, "pending": 0}, {"jo": "JOS1560", "days": 74, "pending": 0}];
 new Chart(document.getElementById('pc'),{
   type:'bar',
   data:{
