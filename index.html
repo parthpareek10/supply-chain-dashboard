@@ -57,8 +57,71 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 <script>
 const d=new Date();document.getElementById('d').textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('lu').textContent=d.toLocaleString('en-IN');
 const processes=[{"name": "CUTTING-1", "pending": 29336, "status": "CRITICAL"}, {"name": "DYE", "pending": 4473, "status": "CRITICAL"}, {"name": "STITCHING", "pending": 2210, "status": "HIGH"}, {"name": "FINISHING", "pending": 2003, "status": "HIGH"}, {"name": "EMBROIDERY", "pending": 1291, "status": "MEDIUM"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "HAND CUTTING-2", "pending": 360, "status": "LOW"}, {"name": "HAND WORK", "pending": 200, "status": "LOW"}, {"name": "BUTTONING", "pending": 175, "status": "LOW"}, {"name": "HAND CUTTING", "pending": 30, "status": "LOW"}],parties=[{"name": "INHOUSE", "pending": 35326}, {"name": "FIROJ KHAN                    -JAIP", "pending": 4423}, {"name": "KHUSI CREATION                -JAIP", "pending": 798}],oldOrders=[{"jo": "JOD1", "days": 1291, "pending": 0}, {"jo": "JOD11", "days": 1291, "pending": 0}, {"jo": "JOD12", "days": 1291, "pending": 0}, {"jo": "JOD14", "days": 1291, "pending": 0}, {"jo": "JOD16", "days": 1291, "pending": 0}, {"jo": "JOD17", "days": 1291, "pending": 0}, {"jo": "JOD18", "days": 1291, "pending": 0}, {"jo": "JOD19", "days": 1291, "pending": 0}, {"jo": "JOD20", "days": 1291, "pending": 0}, {"jo": "JOD15", "days": 1291, "pending": 0}];
-new Chart(document.getElementById('pc'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{data:processes.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8','#10b981'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){var total=ctx.dataset.data.reduce(function(a,b){return a+b},0);var pct=total>0?Math.round(ctx.raw/total*100):0;return ctx.label+': '+ctx.raw.toLocaleString()+' ('+pct+'%)'}}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{display:false}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
-new Chart(document.getElementById('pp'),{type:'doughnut',data:{labels:parties.map(p=>p.name),datasets:[{data:parties.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12,callback:function(item,chart){var total=chart.data.datasets[0].data.reduce(function(a,b){return a+b},0);var value=chart.data.datasets[0].data[item.index];var pct=total>0?Math.round(value/total*100):0;return item.text+' ('+pct+'%)'}}},tooltip:{callbacks:{label:function(ctx){var total=ctx.dataset.data.reduce(function(a,b){return a+b},0);var pct=total>0?Math.round(ctx.raw/total*100):0;return ctx.label+': '+ctx.raw.toLocaleString()+' ('+pct+'%)'}}}}});
+new Chart(document.getElementById('pc'),{
+  type:'bar',
+  data:{
+    labels:processes.map(p=>p.name),
+    datasets:[{data:processes.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8','#10b981'],borderRadius:4}]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            var total=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+            var pct=total>0?Math.round(ctx.raw/total*100):0;
+            return ctx.label+': '+ctx.raw.toLocaleString()+' pcs ('+pct+'%)';
+          }
+        }
+      }
+    },
+    scales:{
+      x:{ticks:{color:'#94a3b8'},grid:{display:false}},
+      y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}
+    }
+  }
+});
+new Chart(document.getElementById('pp'),{
+  type:'doughnut',
+  data:{
+    labels:parties.map(p=>p.name),
+    datasets:[{data:parties.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8']}]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{
+        position:'bottom',
+        labels:{
+          color:'#94a3b8',
+          padding:12,
+          generateLabels:function(chart){
+            var data=chart.data;
+            var total=data.datasets[0].data.reduce(function(a,b){return a+b;},0);
+            return data.labels.map(function(label,i){
+              var value=data.datasets[0].data[i];
+              var pct=total>0?Math.round(value/total*100):0;
+              return{text:label+' ('+pct+'%)',fillStyle:data.datasets[0].backgroundColor[i],index:i};
+            });
+          }
+        }
+      },
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            var total=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+            var pct=total>0?Math.round(ctx.raw/total*100):0;
+            return ctx.label+': '+ctx.raw.toLocaleString()+' pcs ('+pct+'%)';
+          }
+        }
+      }
+    }
+  }
+});
 oldOrders.forEach(o=>{document.getElementById('ao').innerHTML+=`<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.pending.toLocaleString()} pcs</div><div><span class="status ${o.days>15?'critical':'high'}">${o.days} days</span></div></div>`});
 processes.forEach(p=>{document.getElementById('pt').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`});
 parties.forEach(p=>{document.getElementById('pat').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td></tr>`});
