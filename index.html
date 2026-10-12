@@ -38,10 +38,10 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 <div class="header"><div><h1>📊 WIP Dashboard</h1><div class="sub">Job Order Wise Pending — Jaipur Kurti Production</div></div><div class="date" id="d"></div></div>
 <div class="container">
 <div class="kpi-grid">
-<div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">50</div><div class="kpi-sub">Active WIP</div></div>
-<div class="kpi-card blue"><div class="kpi-label">Total Quantity</div><div class="kpi-value">6,691</div><div class="kpi-sub">Pieces</div></div>
-<div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">28,368</div><div class="kpi-sub">Pieces pending across all processes</div></div>
-<div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub">10+ days old</div></div>
+<div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">915</div><div class="kpi-sub">Active WIP</div></div>
+<div class="kpi-card blue"><div class="kpi-label">Total Quantity</div><div class="kpi-value">0</div><div class="kpi-sub">Pieces</div></div>
+<div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">0</div><div class="kpi-sub">Pieces pending across all processes</div></div>
+<div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">0</div><div class="kpi-sub">10+ days old</div></div>
 </div>
 <div class="charts-grid">
 <div class="chart-card"><h3>Process-wise Pending</h3><div class="chart-container"><canvas id="pc"></canvas></div></div>
@@ -54,7 +54,7 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 <div class="footer">WIP Dashboard • Last updated: <span id="lu"></span></div>
 <script>
 const d=new Date();document.getElementById('d').textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('lu').textContent=d.toLocaleString('en-IN');
-const processes=[{"name": "DYE", "pending": 4374, "status": "CRITICAL"}, {"name": "CUTTING-1", "pending": 3913, "status": "CRITICAL"}, {"name": "STITCHING", "pending": 3236, "status": "CRITICAL"}, {"name": "EMBROIDERY", "pending": 2010, "status": "HIGH"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "HAND CUTTING-2", "pending": 132, "status": "LOW"}],parties=[{"name": "FIROJ KHAN                    -JAIP", "pending": 4374}, {"name": "VISHWAROOP MANNA-CUTTING", "pending": 4045}, {"name": "NIDHAT KHAN                   -JAIP", "pending": 3236}, {"name": "KHUSI CREATION                -JAIP", "pending": 1434}, {"name": "YASH INDIA IMPEX", "pending": 1095}],oldOrders=[{"jo": "JOS-1625", "days": 60, "pending": 132}, {"jo": "JOS-1679", "days": 38, "pending": 286}, {"jo": "JOS-1698", "days": 31, "pending": 116}, {"jo": "JOS-1699", "days": 31, "pending": 76}, {"jo": "JOS-1700", "days": 31, "pending": 165}, {"jo": "JOS-1703", "days": 31, "pending": 220}, {"jo": "JOS-1704", "days": 31, "pending": 150}, {"jo": "JOS-1709", "days": 29, "pending": 106}, {"jo": "JOS-1710", "days": 29, "pending": 501}, {"jo": "JOS-1713", "days": 29, "pending": 92}];
+const processes=[],parties=[],oldOrders=[];
 new Chart(document.getElementById('pc'),{type:'bar',data:{labels:processes.map(p=>p.name),datasets:[{data:processes.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8','#10b981'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#94a3b8'},grid:{display:false}},y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}}}});
 new Chart(document.getElementById('pp'),{type:'doughnut',data:{labels:parties.map(p=>p.name),datasets:[{data:parties.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8',padding:12}}}}});
 oldOrders.forEach(o=>{document.getElementById('ao').innerHTML+=`<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.pending.toLocaleString()} pcs</div><div><span class="status ${o.days>15?'critical':'high'}">${o.days} days</span></div></div>`});
