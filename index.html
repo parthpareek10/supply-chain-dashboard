@@ -12,11 +12,11 @@ window.location.href='password.html';
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}
 .header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid var(--border);padding:18px 30px;display:flex;justify-content:space-between;align-items:center}
 .header h1{font-size:22px;font-weight:700;color:var(--accent)}.header .sub{color:var(--muted);font-size:13px;margin-top:4px}.header .date{color:var(--muted);font-size:13px}
-.container{padding:20px 30px;max-width:1400px;margin:0 auto}
+.container{padding:20px 30px;max-width:1400px;margin:0.auto}
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
 .kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden}
 .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.kpi-card.teal::before{background:var(--accent)}.kpi-card.blue::before{background:var(--accent2)}.kpi-card.amber::before{background:var(--warning)}.kpi-card.rose::before{background:var(--danger)}
+.kpi-card.teal::before{background:var(--accent)}.kpi-card.blue::before{background:var(--accent2)}.kpi-card.green::before{background:var(--success)}.kpi-card.amber::before{background:var(--warning)}.kpi-card.rose::before{background:var(--danger)}
 .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .kpi-value{font-size:28px;font-weight:700;margin-bottom:4px}.kpi-sub{font-size:12px;color:var(--muted)}
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
@@ -27,31 +27,33 @@ window.location.href='password.html';
 table{width:100%;border-collapse:collapse}th{text-align:left;padding:10px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border)}
 td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-child td{border-bottom:none}
 .status{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.status.critical{background:rgba(244,63,94,0.15);color:var(--danger)}.status.high{background:rgba(245,158,11,0.15);color:var(--warning)}
+.status.critical{background:rgba(244,63,94,0.15);color:var(--danger)}.status.high{background:rgba(244,158,11,0.15);color:var(--warning)}
 .status.medium{background:rgba(56,189,248,0.15);color:var(--accent2)}.status.low{background:rgba(16,185,129,0.15);color:var(--success)}
 .alert-card{background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.3);border-radius:12px;padding:20px;margin-bottom:24px}
 .alert-card h3{color:var(--danger);font-size:14px;margin-bottom:12px}
 .alert-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(244,63,94,0.1)}.alert-item:last-child{border-bottom:none}
+.success-card{background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:20px;margin-bottom:24px}
+.success-card h3{color:var(--success);font-size:14px;margin-bottom:12px}
 .footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
 @media(max-width:768px){.charts-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 </style></head><body>
-<div class="header"><div><h1>📊 WIP Dashboard</h1><div class="sub">Job Order Wise Pending — Jaipur Kurti Production</div></div><div class="date" id="d"></div></div>
+<div class="header"><div><h1>📊 Production Dashboard</h1><div class="sub">WIP + Stock Received — Jaipur Kurti</div></div><div class="date" id="d"></div></div>
 <div class="container">
 <div class="kpi-grid">
-<div class="kpi-card teal"><div class="kpi-label">Total Job Orders</div><div class="kpi-value">915</div><div class="kpi-sub">Active WIP</div></div>
-<div class="kpi-card blue"><div class="kpi-label">Total Quantity</div><div class="kpi-value">41,243</div><div class="kpi-sub">Pieces</div></div>
-<div class="kpi-card amber"><div class="kpi-label">Total Pending</div><div class="kpi-value">10,409</div><div class="kpi-sub">Pieces pending across all processes</div></div>
+<div class="kpi-card teal"><div class="kpi-label">WIP Orders</div><div class="kpi-value">915</div><div class="kpi-sub">In production</div></div>
+<div class="kpi-card blue"><div class="kpi-label">WIP Quantity</div><div class="kpi-value">41,243</div><div class="kpi-sub">Pieces in production</div></div>
+<div class="kpi-card amber"><div class="kpi-label">WIP Pending</div><div class="kpi-value">10,409</div><div class="kpi-sub">Pieces pending</div></div>
 <div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub">10+ days old</div></div>
 </div>
 <div class="charts-grid">
 <div class="chart-card"><h3>Process-wise Pending</h3><div class="chart-container"><canvas id="pc"></canvas></div></div>
 <div class="chart-card"><h3>Party-wise Pending</h3><div class="chart-container"><canvas id="pp"></canvas></div></div>
 </div>
-<div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders</h3><div id="ao"></div></div>
+<div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders — Immediate Attention</h3><div id="ao"></div></div>
 <div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Status</th></tr></thead><tbody id="pt"></tbody></table></div>
 <div class="table-card"><h3>Party Status</h3><table><thead><tr><th>Party</th><th>Pending</th></tr></thead><tbody id="pat"></tbody></table></div>
 </div>
-<div class="footer">WIP Dashboard • Last updated: <span id="lu"></span></div>
+<div class="footer">Production Dashboard • Last updated: <span id="lu"></span></div>
 <script>
 const d=new Date();document.getElementById('d').textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('lu').textContent=d.toLocaleString('en-IN');
 const processes=[{"name": "CUTTING-1", "pending": 26160, "status": "CRITICAL"}, {"name": "DYE", "pending": 4174, "status": "CRITICAL"}, {"name": "EMBROIDERY", "pending": 699, "status": "MEDIUM"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "STITCHING", "pending": 252, "status": "LOW"}, {"name": "FINISHING", "pending": 75, "status": "LOW"}, {"name": "HAND CUTTING-2", "pending": 70, "status": "LOW"}],parties=[{"name": "INHOUSE", "pending": 26977}, {"name": "FIROJ KHAN                    -JAIP", "pending": 4124}, {"name": "KHUSI CREATION                -JAIP", "pending": 798}],oldOrders=[{"jo": "JOD1", "days": 1291, "pending": 0}, {"jo": "JOD49", "days": 1291, "pending": 0}, {"jo": "JOD7", "days": 1291, "pending": 0}, {"jo": "JOD73", "days": 1291, "pending": 0}, {"jo": "JOD72", "days": 1291, "pending": 0}, {"jo": "JOD74", "days": 1291, "pending": 0}, {"jo": "JOD75", "days": 1291, "pending": 0}, {"jo": "JOD81", "days": 1291, "pending": 0}, {"jo": "JOD76", "days": 1291, "pending": 0}, {"jo": "JOD8", "days": 1291, "pending": 0}];
