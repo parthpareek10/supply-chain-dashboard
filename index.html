@@ -1,6 +1,11 @@
 <!DOCTYPE html>
+<script>
+if(sessionStorage.getItem('wip_auth')!=='true'){
+window.location.href='password.html';
+}
+</script>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Production Dashboard</title>
+<title>WIP Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--accent:#14b8a6;--accent2:#38bdf8;--success:#10b981;--warning:#f59e0b;--danger:#f43f5e;--text:#f1f5f9;--muted:#94a3b8;--border:#334155}
@@ -14,12 +19,11 @@
 .kpi-card.teal::before{background:var(--accent)}.kpi-card.blue::before{background:var(--accent2)}.kpi-card.green::before{background:var(--success)}.kpi-card.amber::before{background:var(--warning)}.kpi-card.rose::before{background:var(--danger)}
 .kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .kpi-value{font-size:28px;font-weight:700;margin-bottom:4px}.kpi-sub{font-size:12px;color:var(--muted)}
-.section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px}
-.section h2{font-size:14px;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
-.section h3{font-size:12px;color:var(--muted);margin-bottom:12px;text-transform:uppercase}
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
 .chart-card h3{font-size:12px;color:var(--muted);margin-bottom:16px;text-transform:uppercase}.chart-container{position:relative;height:280px}
+.table-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px;overflow-x:auto}
+.table-card h3{font-size:12px;color:var(--muted);margin-bottom:16px;text-transform:uppercase}
 table{width:100%;border-collapse:collapse}th{text-align:left;padding:10px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border)}
 td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-child td{border-bottom:none}
 .status{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
@@ -28,112 +32,97 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 .alert-card{background:rgba(244,63,94,0.05);border:1px solid rgba(244,63,94,0.3);border-radius:12px;padding:20px;margin-bottom:24px}
 .alert-card h3{color:var(--danger);font-size:14px;margin-bottom:12px}
 .alert-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(244,63,94,0.1)}.alert-item:last-child{border-bottom:none}
-.variance-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.variance-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
-.variance-card h3{font-size:12px;margin-bottom:12px}
-.variance-card.more h3{color:var(--success)}.variance-card.less h3{color:var(--danger)}
-.variance-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}.variance-item:last-child{border-bottom:none}
+.success-card{background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:20px;margin-bottom:24px}
+.success-card h3{color:var(--success);font-size:14px;margin-bottom:12px}
 .footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
-@media(max-width:768px){.charts-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.variance-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.charts-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
 </style></head><body>
-<div class="header"><div><h1>📊 Production Dashboard</h1><div class="sub">CUTTING-1 to FINISHING — Jaipur Kurti</div></div><div class="date" id="d"></div></div>
+<div class="header"><div><h1>📊 Production Dashboard</h1><div class="sub">WIP + Stock Received — Jaipur Kurti</div></div><div class="date" id="d"></div></div>
 <div class="container">
-
-<!-- KPI Cards -->
 <div class="kpi-grid">
-<div class="kpi-card teal"><div class="kpi-label">Total JOs</div><div class="kpi-value">242</div><div class="kpi-sub">Active</div></div>
-<div class="kpi-card green"><div class="kpi-label">Complete (Finishing)</div><div class="kpi-value">112</div><div class="kpi-sub">28,728 pcs in warehouse</div></div>
-<div class="kpi-card amber"><div class="kpi-label">WIP (In Production)</div><div class="kpi-value">130</div><div class="kpi-sub">14,887 pcs</div></div>
-<div class="kpi-card blue"><div class="kpi-label">Total Issue</div><div class="kpi-value">531,621</div><div class="kpi-sub">Pieces</div></div>
-<div class="kpi-card rose"><div class="kpi-label">Total Receipt</div><div class="kpi-value">162,277</div><div class="kpi-sub">Pieces</div></div>
+<div class="kpi-card teal"><div class="kpi-label">WIP Orders</div><div class="kpi-value">245</div><div class="kpi-sub">In production</div></div>
+<div class="kpi-card blue"><div class="kpi-label">WIP Quantity</div><div class="kpi-value">93,509</div><div class="kpi-sub">Pieces in production</div></div>
+<div class="kpi-card amber"><div class="kpi-label">WIP Pending</div><div class="kpi-value">11,534</div><div class="kpi-sub">Pieces pending</div></div>
+<div class="kpi-card rose"><div class="kpi-label">At-Risk Orders</div><div class="kpi-value">10</div><div class="kpi-sub">10+ days old</div></div>
 </div>
-
-<!-- WIP vs Complete -->
-<div class="section">
-<h2>WIP vs Complete</h2>
 <div class="charts-grid">
-<div class="chart-card"><h3>WIP vs Complete (JOs)</h3><div class="chart-container"><canvas id="wc"></canvas></div></div>
-<div class="chart-card"><h3>WIP vs Complete (Quantity)</h3><div class="chart-container"><canvas id="wq"></canvas></div></div>
+<div class="chart-card"><h3>Process-wise Pending</h3><div class="chart-container"><canvas id="pc"></canvas></div></div>
+<div class="chart-card"><h3>Party-wise Pending</h3><div class="chart-container"><canvas id="pp"></canvas></div></div>
 </div>
-</div>
-
-<!-- WIP Breakdown -->
-<div class="section">
-<h2>WIP Breakdown — Kaunsi Process Pe Atke Hain</h2>
-<table><thead><tr><th>Process</th><th>JOs</th><th>Quantity</th><th>Status</th></tr></thead><tbody id="wip"></tbody></table>
-</div>
-
-<!-- Process-wise -->
-<div class="section">
-<h2>Process-wise Status</h2>
-<table><thead><tr><th>Process</th><th>JOs</th><th>Issue</th><th>Receipt</th><th>Pending</th><th>Status</th></tr></thead><tbody id="pt"></tbody></table>
-</div>
-
-<!-- CUTTING-1 Variance -->
-<div class="section">
-<h2>CUTTING-1 Variance Analysis</h2>
-<div class="variance-grid">
-<div class="variance-card more">
-<h3>🟢 Receipt > Issue (Zyada mila)</h3>
-<div id="variance-more"></div>
-</div>
-<div class="variance-card less">
-<h3>🔴 Receipt < Issue (Kam mila)</h3>
-<div id="variance-less"></div>
-</div>
-</div>
-</div>
-
-<!-- Party-wise -->
-<div class="section">
-<h2>Party-wise Status</h2>
-<table><thead><tr><th>Party</th><th>JOs</th><th>Issue</th><th>Receipt</th><th>Pending</th></tr></thead><tbody id="party"></tbody></table>
-</div>
-
+<div class="alert-card"><h3>⚠️ 10+ Day Old Job Orders — Immediate Attention</h3><div id="ao"></div></div>
+<div class="table-card"><h3>Process Status</h3><table><thead><tr><th>Process</th><th>Pending</th><th>Status</th></tr></thead><tbody id="pt"></tbody></table></div>
+<div class="table-card"><h3>Party Status</h3><table><thead><tr><th>Party</th><th>Pending</th></tr></thead><tbody id="pat"></tbody></table></div>
 </div>
 <div class="footer">Production Dashboard • Last updated: <span id="lu"></span></div>
 <script>
 const d=new Date();document.getElementById('d').textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('lu').textContent=d.toLocaleString('en-IN');
-
-// WIP vs Complete Chart
-new Chart(document.getElementById('wc'),{type:'doughnut',data:{labels:['Complete','WIP'],datasets:[{data:[112,130],backgroundColor:['#10b981','#f59e0b']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8'}}}}});
-
-new Chart(document.getElementById('wq'),{type:'doughnut',data:{labels:['Complete','WIP'],datasets:[{data:[28728,14887],backgroundColor:['#10b981','#f59e0b']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#94a3b8'}}}}});
-
-// WIP Breakdown
-const wipBreakdown = {"EMBROIDERY": 8, "UNKNOWN": 76, "DYE": 10, "CUTTING-1": 24, "STITCHING": 9, "HAND CUTTING-2": 1, "SCALPIN": 2};
-const wipQty = {"EMBROIDERY": 1909.0, "DYE": 3203.0, "CUTTING-1": 5687.0, "STITCHING": 3437.0, "HAND CUTTING-2": 132.0, "SCALPIN": 519.0};
-const wip = document.getElementById('wip');
-Object.entries(wipBreakdown).sort((a,b) => b[1] - a[1]).forEach(([proc, count]) => {
-    const qty = wipQty[proc] || 0;
-    const status = qty > 3000 ? 'CRITICAL' : qty > 1000 ? 'HIGH' : qty > 0 ? 'MEDIUM' : 'LOW';
-    wip.innerHTML += `<tr><td>${proc}</td><td>${count}</td><td>${qty.toLocaleString()}</td><td><span class="status ${status.toLowerCase()}">${status}</span></td></tr>`;
+const processes=[{"name": "CUTTING-1", "pending": 7939, "status": "CRITICAL"}, {"name": "DYE", "pending": 2781, "status": "HIGH"}, {"name": "EMBROIDERY", "pending": 1927, "status": "HIGH"}, {"name": "FINISHING", "pending": 100, "status": "LOW"}, {"name": "HAND CUTTING-2", "pending": 134, "status": "LOW"}, {"name": "SCALPIN", "pending": 519, "status": "MEDIUM"}, {"name": "STITCHING", "pending": 5526, "status": "CRITICAL"}],parties=[{"name": "FIROJ KHAN                    -JAIP", "pending": 2781}, {"name": "INHOUSE", "pending": 100}, {"name": "KHUSI CREATION                -JAIP", "pending": 1351}, {"name": "NIDHAT KHAN                   -JAIP", "pending": 5526}, {"name": "VISHWAROOP MANNA-CUTTING", "pending": 7939}, {"name": "YASH INDIA IMPEX", "pending": 1095}],oldOrders=[{"jo": "JOS-1551", "days": 78, "pending": 15}, {"jo": "JOS-1556", "days": 77, "pending": 9}, {"jo": "JOS-1557", "days": 77, "pending": 5}, {"jo": "JOS-1575", "days": 71, "pending": 2}, {"jo": "JOS-1582", "days": 69, "pending": 56}, {"jo": "JOS-1608", "days": 65, "pending": 2}, {"jo": "JOS-1625", "days": 61, "pending": 14}, {"jo": "JOS-1632", "days": 58, "pending": 42}, {"jo": "JOS-1633", "days": 58, "pending": 68}, {"jo": "JOS-1634", "days": 58, "pending": 4}];
+new Chart(document.getElementById('pc'),{
+  type:'bar',
+  data:{
+    labels:processes.map(p=>p.name),
+    datasets:[{data:processes.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8','#10b981'],borderRadius:4}]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            var total=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+            var pct=total>0?Math.round(ctx.raw/total*100):0;
+            return ctx.label+': '+ctx.raw.toLocaleString()+' pcs ('+pct+'%)';
+          }
+        }
+      }
+    },
+    scales:{
+      x:{ticks:{color:'#94a3b8'},grid:{display:false}},
+      y:{ticks:{color:'#94a3b8'},grid:{color:'rgba(51,65,85,0.3)'}}
+    }
+  }
 });
-
-// Process table
-const processes = {"BUTTONING": {"jos": 19, "issue": 23071.0, "receipt": 23071.0, "pending": 0.0}, "CUTTING-1": {"jos": 172, "issue": 46397.0, "receipt": 40916.0, "pending": 5481.0}, "DYE": {"jos": 30, "issue": 21315.0, "receipt": 17782.3, "pending": 3532.7000000000007}, "EMBROIDERY": {"jos": 65, "issue": 12033.0, "receipt": 10122.0, "pending": 1911.0}, "FINISHING": {"jos": 112, "issue": 28728.0, "receipt": 28728.0, "pending": 0.0}, "HAND CUTTING": {"jos": 2, "issue": 484.0, "receipt": 484.0, "pending": 0.0}, "HAND CUTTING-2": {"jos": 7, "issue": 2391.0, "receipt": 2257.0, "pending": 134.0}, "HAND WORK": {"jos": 21, "issue": 7238.0, "receipt": 7238.0, "pending": 0.0}, "PACKING": {"jos": 3, "issue": 860.0, "receipt": 860.0, "pending": 0.0}, "PINTUCK": {"jos": 1, "issue": 65.0, "receipt": 65.0, "pending": 0.0}, "SCALPIN": {"jos": 2, "issue": 519.0, "receipt": 0.0, "pending": 519.0}, "STITCHING": {"jos": 127, "issue": 34106.0, "receipt": 30754.0, "pending": 3352.0}};
-const pt = document.getElementById('pt');
-Object.entries(processes).sort((a,b) => b[1].pending - a[1].pending).forEach(([name, p]) => {
-    const status = p.pending > 3000 ? 'CRITICAL' : p.pending > 1000 ? 'HIGH' : p.pending > 0 ? 'MEDIUM' : 'LOW';
-    pt.innerHTML += `<tr><td>${name}</td><td>${p.jos}</td><td>${p.issue.toLocaleString()}</td><td>${p.receipt.toLocaleString()}</td><td>${p.pending.toLocaleString()}</td><td><span class="status ${status.toLowerCase()}">${status}</span></td></tr>`;
+new Chart(document.getElementById('pp'),{
+  type:'doughnut',
+  data:{
+    labels:parties.map(p=>p.name),
+    datasets:[{data:parties.map(p=>p.pending),backgroundColor:['#f43f5e','#f59e0b','#38bdf8','#14b8a6','#818cf8']}]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:false,
+    plugins:{
+      legend:{
+        position:'bottom',
+        labels:{
+          color:'#94a3b8',
+          padding:12,
+          generateLabels:function(chart){
+            var data=chart.data;
+            var total=data.datasets[0].data.reduce(function(a,b){return a+b;},0);
+            return data.labels.map(function(label,i){
+              var value=data.datasets[0].data[i];
+              var pct=total>0?Math.round(value/total*100):0;
+              return{text:label+' ('+pct+'%)',fillStyle:data.datasets[0].backgroundColor[i],index:i};
+            });
+          }
+        }
+      },
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            var total=ctx.dataset.data.reduce(function(a,b){return a+b;},0);
+            var pct=total>0?Math.round(ctx.raw/total*100):0;
+            return ctx.label+': '+ctx.raw.toLocaleString()+' pcs ('+pct+'%)';
+          }
+        }
+      }
+    }
+  }
 });
-
-// Variance
-const variance = {"more_count": 33, "more_qty": 781, "more_avg": 23.666666666666668, "more_avg_pct": 10.084848484848486, "less_count": 29, "less_qty": -575, "less_avg": -19.82758620689655, "less_avg_pct": -6.475862068965517, "exact_count": 86, "net": 206};
-document.getElementById('variance-more').innerHTML = `
-<div class="variance-item"><span>Count</span><span>${variance.more_count} JOs</span></div>
-<div class="variance-item"><span>Total</span><span>+${variance.more_qty.toLocaleString()} pcs</span></div>
-<div class="variance-item"><span>Average</span><span>+${variance.more_avg.toFixed(1)} pcs (${variance.more_avg_pct.toFixed(1)}%)</span></div>
-<div class="variance-item"><span>Net</span><span>+${variance.net.toLocaleString()} pcs</span></div>`;
-document.getElementById('variance-less').innerHTML = `
-<div class="variance-item"><span>Count</span><span>${variance.less_count} JOs</span></div>
-<div class="variance-item"><span>Total</span><span>${variance.less_qty.toLocaleString()} pcs</span></div>
-<div class="variance-item"><span>Average</span><span>${variance.less_avg.toFixed(1)} pcs (${variance.less_avg_pct.toFixed(1)}%)</span></div>`;
-
-// Party table
-const parties = {"FIROJ KHAN                    -JAIPUR": {"jos": 30, "issue": 21315.0, "receipt": 17782.3, "pending": 3532.7000000000007}, "INHOUSE": {"jos": 112, "issue": 29788.0, "receipt": 29788.0, "pending": 0.0}, "JITENDRA KUMAR                -JAIPUR": {"jos": 16, "issue": 3419.0, "receipt": 3419.0, "pending": 0.0}, "KHUSI CREATION                -JAIPUR": {"jos": 33, "issue": 5407.0, "receipt": 4072.0, "pending": 1335.0}, "M/S ANAYA FASHION             -JAIPUR": {"jos": 2, "issue": 139.0, "receipt": 139.0, "pending": 0.0}, "MAHADEV ENTERPRISES           -JAIPUR": {"jos": 2, "issue": 20400.0, "receipt": 20400.0, "pending": 0.0}, "MOHD AJMAL                    -JAIPUR": {"jos": 33, "issue": 7914.0, "receipt": 7914.0, "pending": 0.0}, "NIDHAT KHAN                   -JAIPUR": {"jos": 94, "issue": 26192.0, "receipt": 22840.0, "pending": 3352.0}, "SAMSUL HOQUE                                                                                        ": {"jos": 1, "issue": 100.0, "receipt": 100.0, "pending": 0.0}, "SEEMA JANGID                                                                                        ": {"jos": 12, "issue": 4917.0, "receipt": 4917.0, "pending": 0.0}, "SONU (BUTTON WALA)                                                                                  ": {"jos": 17, "issue": 2671.0, "receipt": 2671.0, "pending": 0.0}, "SUNITA DEVI AND MANOJ KUMAR KASOTIYA                                                                ": {"jos": 4, "issue": 1316.0, "receipt": 1316.0, "pending": 0.0}, "VISHWAROOP MANNA-CUTTING                                                                            ": {"jos": 172, "issue": 49459.0, "receipt": 43844.0, "pending": 5615.0}, "YASH INDIA IMPEX                                                                                    ": {"jos": 18, "issue": 4170.0, "receipt": 3075.0, "pending": 1095.0}};
-const party = document.getElementById('party');
-Object.entries(parties).sort((a,b) => b[1].pending - a[1].pending).forEach(([name, p]) => {
-    party.innerHTML += `<tr><td>${name}</td><td>${p.jos}</td><td>${p.issue.toLocaleString()}</td><td>${p.receipt.toLocaleString()}</td><td>${p.pending.toLocaleString()}</td></tr>`;
-});
+oldOrders.forEach(o=>{document.getElementById('ao').innerHTML+=`<div class="alert-item"><div><strong>${o.jo}</strong> — ${o.pending.toLocaleString()} pcs</div><div><span class="status ${o.days>15?'critical':'high'}">${o.days} days</span></div></div>`});
+processes.forEach(p=>{document.getElementById('pt').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td><td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td></tr>`});
+parties.forEach(p=>{document.getElementById('pat').innerHTML+=`<tr><td>${p.name}</td><td>${p.pending.toLocaleString()}</td></tr>`});
 </script></body></html>
