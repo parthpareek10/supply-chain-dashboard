@@ -164,7 +164,7 @@ document.getElementById('pp').addEventListener('click',function(evt){
 
 function short_name(name){
   name=name.trim();
-  if("-JAIP" in name){name=name.split("-JAIP")[0].trim();}
+  if(name.indexOf("-JAIP")>=0){name=name.split("-JAIP")[0].trim();}
   if(name.length>18){name=name.substring(0,18);}
   return name;
 }
