@@ -1,0 +1,181 @@
+{
+  "total_orders": 245,
+  "total_jo_qty": 93509,
+  "total_pending": 18926,
+  "processes": [
+    {
+      "name": "BUTTONING",
+      "issue": 23071,
+      "receipt": 23071,
+      "pending": 0,
+      "status": "LOW"
+    },
+    {
+      "name": "CUTTING-1",
+      "issue": 48329,
+      "receipt": 41171,
+      "pending": 7939,
+      "status": "CRITICAL"
+    },
+    {
+      "name": "DYE",
+      "issue": 21315,
+      "receipt": 18530,
+      "pending": 2781,
+      "status": "HIGH"
+    },
+    {
+      "name": "EMBROIDERY",
+      "issue": 11597,
+      "receipt": 9670,
+      "pending": 1927,
+      "status": "HIGH"
+    },
+    {
+      "name": "FINISHING",
+      "issue": 28920,
+      "receipt": 28820,
+      "pending": 100,
+      "status": "LOW"
+    },
+    {
+      "name": "HAND CUTTING",
+      "issue": 484,
+      "receipt": 484,
+      "pending": 0,
+      "status": "LOW"
+    },
+    {
+      "name": "HAND CUTTING-2",
+      "issue": 2391,
+      "receipt": 2257,
+      "pending": 134,
+      "status": "LOW"
+    },
+    {
+      "name": "HAND WORK",
+      "issue": 7238,
+      "receipt": 7238,
+      "pending": 0,
+      "status": "LOW"
+    },
+    {
+      "name": "PACKING",
+      "issue": 860,
+      "receipt": 860,
+      "pending": 0,
+      "status": "LOW"
+    },
+    {
+      "name": "PINTUCK",
+      "issue": 65,
+      "receipt": 65,
+      "pending": 0,
+      "status": "LOW"
+    },
+    {
+      "name": "SCALPIN",
+      "issue": 519,
+      "receipt": 0,
+      "pending": 519,
+      "status": "MEDIUM"
+    },
+    {
+      "name": "STITCHING",
+      "issue": 36372,
+      "receipt": 30846,
+      "pending": 5526,
+      "status": "CRITICAL"
+    }
+  ],
+  "parties": [
+    {
+      "name": "FIROJ KHAN                    -JAIP",
+      "issue": 21315,
+      "receipt": 18530,
+      "pending": 2781
+    },
+    {
+      "name": "INHOUSE",
+      "issue": 28920,
+      "receipt": 28820,
+      "pending": 100
+    },
+    {
+      "name": "KHUSI CREATION                -JAIP",
+      "issue": 5103,
+      "receipt": 3752,
+      "pending": 1351
+    },
+    {
+      "name": "NIDHAT KHAN                   -JAIP",
+      "issue": 28458,
+      "receipt": 22932,
+      "pending": 5526
+    },
+    {
+      "name": "VISHWAROOP MANNA-CUTTING",
+      "issue": 48335,
+      "receipt": 41171,
+      "pending": 7939
+    },
+    {
+      "name": "YASH INDIA IMPEX",
+      "issue": 4170,
+      "receipt": 3075,
+      "pending": 1095
+    }
+  ],
+  "old_orders": [
+    {
+      "jo": "JOS-1551",
+      "days": 79,
+      "pending": 15
+    },
+    {
+      "jo": "JOS-1556",
+      "days": 78,
+      "pending": 9
+    },
+    {
+      "jo": "JOS-1557",
+      "days": 78,
+      "pending": 5
+    },
+    {
+      "jo": "JOS-1575",
+      "days": 72,
+      "pending": 2
+    },
+    {
+      "jo": "JOS-1582",
+      "days": 70,
+      "pending": 56
+    },
+    {
+      "jo": "JOS-1608",
+      "days": 66,
+      "pending": 2
+    },
+    {
+      "jo": "JOS-1625",
+      "days": 62,
+      "pending": 14
+    },
+    {
+      "jo": "JOS-1632",
+      "days": 59,
+      "pending": 42
+    },
+    {
+      "jo": "JOS-1633",
+      "days": 59,
+      "pending": 68
+    },
+    {
+      "jo": "JOS-1634",
+      "days": 59,
+      "pending": 4
+    }
+  ]
+}
