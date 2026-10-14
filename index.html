@@ -108,7 +108,7 @@ var barChart=new Chart(document.getElementById('pc'),{
   }
 });
 
-// Pie chart with % labels directly in labels array
+// Pie chart with % labels on slices
 var pieChart=new Chart(document.getElementById('pp'),{
   type:'doughnut',
   data:{
@@ -136,6 +136,38 @@ var pieChart=new Chart(document.getElementById('pp'),{
         }
       }
     }
+  }
+});
+
+// Draw % on pie slices using afterDraw plugin
+Chart.register({
+  id:'sliceLabels',
+  afterDraw:function(chart){
+    if(chart.config.type!=='doughnut')return;
+    var ctx=chart.ctx;
+    var meta=chart.getDatasetMeta(0);
+    var data=chart.data.datasets[0].data;
+    var total=0;
+    for(var i=0;i<data.length;i++){total+=data[i];}
+    if(total===0)return;
+    ctx.save();
+    ctx.font='bold 14px Segoe UI';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    for(var i=0;i<meta.data.length;i++){
+      var arc=meta.data[i];
+      var value=data[i];
+      var pct=Math.round(value/total*100);
+      if(pct<2)continue;
+      var midAngle=(arc.startAngle+arc.endAngle)/2;
+      var x=arc.x+Math.cos(midAngle)*arc.outerRadius*0.6;
+      var y=arc.y+Math.sin(midAngle)*arc.outerRadius*0.6;
+      ctx.fillStyle='#ffffff';
+      ctx.shadowColor='rgba(0,0,0,0.8)';
+      ctx.shadowBlur=6;
+      ctx.fillText(pct+'%',x,y);
+    }
+    ctx.restore();
   }
 });
 
