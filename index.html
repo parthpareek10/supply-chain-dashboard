@@ -70,9 +70,9 @@ td{padding:12px;font-size:13px;border-bottom:1px solid var(--border)}tr:last-chi
 const d=new Date();document.getElementById('d').textContent=d.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('lu').textContent=d.toLocaleString('en-IN');
 const processes=[{"name": "BUTTONING", "issue": 23071, "receipt": 23071, "pending": 0, "status": "LOW"}, {"name": "CUTTING-1", "issue": 48329, "receipt": 41171, "pending": 7939, "status": "CRITICAL"}, {"name": "DYE", "issue": 21315, "receipt": 18530, "pending": 2781, "status": "HIGH"}, {"name": "EMBROIDERY", "issue": 11597, "receipt": 9670, "pending": 1927, "status": "HIGH"}, {"name": "FINISHING", "issue": 28920, "receipt": 28820, "pending": 100, "status": "LOW"}, {"name": "HAND CUTTING", "issue": 484, "receipt": 484, "pending": 0, "status": "LOW"}, {"name": "HAND CUTTING-2", "issue": 2391, "receipt": 2257, "pending": 134, "status": "LOW"}, {"name": "HAND WORK", "issue": 7238, "receipt": 7238, "pending": 0, "status": "LOW"}, {"name": "PACKING", "issue": 860, "receipt": 860, "pending": 0, "status": "LOW"}, {"name": "PINTUCK", "issue": 65, "receipt": 65, "pending": 0, "status": "LOW"}, {"name": "SCALPIN", "issue": 519, "receipt": 0, "pending": 519, "status": "MEDIUM"}, {"name": "STITCHING", "issue": 36372, "receipt": 30846, "pending": 5526, "status": "CRITICAL"}],parties=[{"name": "FIROJ KHAN                    -JAIP", "issue": 21315, "receipt": 18530, "pending": 2781}, {"name": "INHOUSE", "issue": 28920, "receipt": 28820, "pending": 100}, {"name": "KHUSI CREATION                -JAIP", "issue": 5103, "receipt": 3752, "pending": 1351}, {"name": "NIDHAT KHAN                   -JAIP", "issue": 28458, "receipt": 22932, "pending": 5526}, {"name": "VISHWAROOP MANNA-CUTTING", "issue": 48335, "receipt": 41171, "pending": 7939}, {"name": "YASH INDIA IMPEX", "issue": 4170, "receipt": 3075, "pending": 1095}],oldOrders=[{"jo": "JOS-1551", "days": 78, "pending": 15}, {"jo": "JOS-1556", "days": 77, "pending": 9}, {"jo": "JOS-1557", "days": 77, "pending": 5}, {"jo": "JOS-1575", "days": 71, "pending": 2}, {"jo": "JOS-1582", "days": 69, "pending": 56}, {"jo": "JOS-1608", "days": 65, "pending": 2}, {"jo": "JOS-1625", "days": 61, "pending": 14}, {"jo": "JOS-1632", "days": 58, "pending": 42}, {"jo": "JOS-1633", "days": 58, "pending": 68}, {"jo": "JOS-1634", "days": 58, "pending": 4}];
 var colors=["#f43f5e", "#f59e0b", "#38bdf8", "#14b8a6", "#818cf8", "#10b981", "#f97316", "#a855f7", "#06b6d4", "#84cc16", "#e879f9", "#fb923c", "#2dd4bf", "#c084fc"];
+var pieLabels=["FIROJ KHAN (15%)", "INHOUSE (1%)", "KHUSI CREATION (7%)", "NIDHAT KHAN (29%)", "VISHWAROOP MANNA-C (42%)", "YASH INDIA IMPEX (6%)"];
 var joList=[];
 
-// Load jo_list from separate file
 fetch('jo_list.json').then(function(r){return r.json();}).then(function(data){joList=data;}).catch(function(e){console.log('jo_list load failed',e);});
 
 // Bar chart with 3 datasets
@@ -108,11 +108,11 @@ var barChart=new Chart(document.getElementById('pc'),{
   }
 });
 
-// Pie chart with % labels in legend
+// Pie chart with % labels directly in labels array
 var pieChart=new Chart(document.getElementById('pp'),{
   type:'doughnut',
   data:{
-    labels:parties.map(p=>short_name(p.name)),
+    labels:pieLabels,
     datasets:[{data:parties.map(p=>p.pending),backgroundColor:colors.slice(0,parties.length),borderWidth:2,borderColor:'#1e293b'}]
   },
   options:{
@@ -123,16 +123,7 @@ var pieChart=new Chart(document.getElementById('pp'),{
         position:'bottom',
         labels:{
           color:'#f1f5f9',
-          padding:14,font:{size:12,weight:'bold'},
-          generateLabels:function(chart){
-            var data=chart.data;
-            var total=data.datasets[0].data.reduce(function(a,b){return a+b;},0);
-            return data.labels.map(function(label,i){
-              var value=data.datasets[0].data[i];
-              var pct=total>0?Math.round(value/total*100):0;
-              return{text:label+' ('+pct+'%) - '+value.toLocaleString()+' pcs',fillStyle:chart.data.datasets[0].backgroundColor[i],index:i};
-            });
-          }
+          padding:14,font:{size:12,weight:'bold'}
         }
       },
       tooltip:{
@@ -165,13 +156,6 @@ document.getElementById('pp').addEventListener('click',function(evt){
     showDrill('Party: '+partyName,joList.filter(function(j){return j.worker.indexOf(partyName.substring(0,15))>=0;}));
   }
 });
-
-function short_name(name){
-  name=name.trim();
-  if(name.indexOf("-JAIP")>=0){name=name.split("-JAIP")[0].trim();}
-  if(name.length>18){name=name.substring(0,18);}
-  return name;
-}
 
 function showDrill(title,jos){
   document.getElementById('drillTitle').textContent=title+' ('+jos.length+' JOs)';
